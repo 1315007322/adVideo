@@ -4,7 +4,7 @@
       <source :src="url" type="video/mp4" />
       您的浏览器不支持视频标签。
     </video>
-    <p id="timer-text" style='position:absolute;top:13px;'>倒计时：{{ timer }} 秒</p>
+    <p id="timer-text" style='position:absolute;top:13px;left:0;right:0;margin:auto;color:red;font-weight: bold'>倒计时：{{ timer }} 秒</p>
   </div>
 </template>
 <script>

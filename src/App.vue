@@ -1,42 +1,46 @@
 <template>
   <div class="ads">
     <van-submit-bar
-      label="我的钱包"
-      :price="Number(moneny) * 100"
-      :decimal-length="2"
-      button-text="提现"
-      @submit="onSubmit"
+        label="我的钱包"
+        :price="Number(moneny) * 100"
+        :decimal-length="2"
+        button-text="提现"
+        @submit="onSubmit"
     />
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
-        v-model:loading="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="onLoad"
+          v-model:loading="loading"
+          :finished="finished"
+          finished-text="没有更多了"
+          @load="onLoad"
       >
         <van-cell-group inset center>
           <van-cell
-            :title="item.title"
-            v-for="(item, index) in list"
-            :label="item.des"
+              v-for="(item, index) in list"
+              :label="item.des"
           >
+            <template #title>
+              <p>{{ item.title }} <span style="padding: 10px"> + {{ item.amount }}</span></p>
+            </template>
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <template #icon>
               <van-image
-                style="margin-right: 10px"
-                width="40"
-                height="40"
-                src="../assets/images/play.png"
+                  style="margin-right: 10px"
+                  width="40"
+                  height="40"
+                  src="../assets/images/dy.png"
               />
             </template>
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
             <template #value>
-              <span style="padding: 10px"> + {{ item.amount }}</span>
+
               <van-button
-                size="small"
-                @click="() => openDialog(index, item)"
-                type="primary"
-                >前往</van-button
+                  size="small"
+                  @click="() => openDialog(index, item)"
+                  type="primary"
+                  :disabled="item.isFinish"
+              >{{item.isFinish?'已完成':'前往'}}
+              </van-button
               >
             </template>
           </van-cell>
@@ -47,9 +51,11 @@
 </template>
 
 <script lang="tsx">
-import { ref, h } from "vue";
+import {ref, h} from "vue";
 import Video from "./video.vue";
 import Success from "./success.vue";
+import {showDialog} from "vant";
+
 export default {
   setup() {
     const list = ref([]);
@@ -90,9 +96,10 @@ export default {
       onLoad();
     };
 
-    const timer = ref(30);
+    const timer = ref(10);
     const url = ref("");
     const amount = ref(0);
+    const index = ref(null)
     let countdownInterval = null;
     let isTimerComplete = false;
 
@@ -101,21 +108,29 @@ export default {
 
       showDialog({
         title: "观看视频",
-        closeOnClickOverlay: true,
+        overlay: false,
+        className: 'video_dl',
         message: () =>
-          h(Video, {
-            url: url.value,
-            timer: timer.value,
-          }),
+            h(Video, {
+              url: url.value,
+              timer: timer.value,
+            }),
         showConfirmButton: false,
-        showCancelButton: false,
+        showCancelButton: true,
         closeOnClickOverlay: false,
+        lockScroll: false,
+        cancelButtonText: '关闭',
+        beforeClose: () => {
+          clearIn(true)
+          return true
+        }
       }).then(() => {
         clearIn();
       });
     };
 
-    const startCountdown = (index, item) => {
+    const startCountdown = (i, item) => {
+      index.value = Number(i)
       amount.value = item.amount;
       const randomInt = Math.floor(Math.random() * 11) + 1;
       console.log("randomInt", randomInt);
@@ -128,11 +143,10 @@ export default {
           closeDialog();
           showDialog({
             title: "",
-            closeOnClickOverlay: true,
             message: () =>
-              h(Success, {
-                amount: amount.value,
-              }),
+                h(Success, {
+                  amount: amount.value,
+                }),
             showConfirmButton: true,
             confirmButtonText: "确认",
             showCancelButton: false,
@@ -149,12 +163,11 @@ export default {
 
       showDialog({
         title: "提现成功！",
-        closeOnClickOverlay: true,
         message: () =>
-          h(Success, {
-            amount: moneny.value,
-            isSuccess: true,
-          }),
+            h(Success, {
+              amount: moneny.value,
+              isSuccess: true,
+            }),
         showConfirmButton: true,
         confirmButtonText: "确认",
         showCancelButton: false,
@@ -164,16 +177,29 @@ export default {
       });
     };
 
-    const clearIn = () => {
-      clearInterval(countdownInterval);
-      timer.value = 30;
-      isTimerComplete = true;
-      url.value = "";
-      showNotify({
-        type: "success",
-        message: "成功获取奖励！",
-        duration: 1000,
-      });
+    const clearIn = (isCancel = false) => {
+      if (isCancel) {
+        clearInterval(countdownInterval);
+        timer.value = 10;
+        isTimerComplete = true;
+        url.value = "";
+        showNotify({
+          type: "danger",
+          message: "为满足时长，无法获取奖励！",
+          duration: 1000,
+        });
+      } else {
+        clearInterval(countdownInterval);
+        timer.value = 10;
+        list.value[index.value]['isFinish'] = true
+        isTimerComplete = true;
+        url.value = "";
+        showNotify({
+          type: "success",
+          message: "成功获取奖励！",
+          duration: 1000,
+        });
+      }
     };
 
     return {
@@ -192,16 +218,41 @@ export default {
 </script>
 
 <style lang="less">
+.van-cell {
+  align-items: center;
+}
+
 .van-cell__title,
 .van-cell__value {
   flex: auto;
 }
-.van-cell__value {
-  & > span {
+
+.van-cell__title {
+  p > span {
     color: red;
   }
+}
+
+.van-cell__value {
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+.video_dl {
+  padding: 0;
+  background: none;
+  .van-dialog__footer{
+    width: 50%;
+    margin: auto;
+  }
+  .van-dialog__header {
+    display: none;
+  }
+
+  .van-dialog__message {
+    padding: 0;
+    overflow-y: hidden;
+  }
 }
 </style>
