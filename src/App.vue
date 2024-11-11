@@ -312,7 +312,7 @@ export default {
   background: none;
 
   .van-dialog__footer {
-    width: 50%;
+    width: 30%;
     margin: auto;
   }
 
