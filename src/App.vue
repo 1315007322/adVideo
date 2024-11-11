@@ -28,7 +28,7 @@
                   style="margin-right: 10px"
                   width="40"
                   height="40"
-                  src="../assets/images/dy.png"
+                  src="https://file-1330837989.cos.ap-guangzhou.myqcloud.com//dy.png"
               />
             </template>
             <!-- 使用 right-icon 插槽来自定义右侧图标 -->
@@ -74,7 +74,7 @@ export default {
           list.value.push({
             title: "看视频领红包",
             des: "观看精彩视频即可领红包",
-            path: `../assets/images/${i + 1}.mp4`,
+            path: `https://file-1330837989.cos.ap-guangzhou.myqcloud.com//${i + 1}.mp4`,
             amount: (Math.random() * (2 - 1) + 1).toFixed(2),
           });
         }
@@ -134,7 +134,7 @@ export default {
       amount.value = item.amount;
       const randomInt = Math.floor(Math.random() * 11) + 1;
       console.log("randomInt", randomInt);
-      url.value = `../assets/images/${randomInt}.mp4`;
+      url.value = `https://file-1330837989.cos.ap-guangzhou.myqcloud.com/${randomInt}.mp4`;
       countdownInterval = setInterval(() => {
         timer.value -= 1;
         console.log("timer.value", timer.value);
