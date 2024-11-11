@@ -1,6 +1,6 @@
 <template>
   <div class="ads">
-    <div v-if="isLogin" class="login">
+    <div v-if="!isLogin" class="login">
 
       <van-form @submit="onSubmit1">
         <van-image
