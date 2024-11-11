@@ -1,6 +1,6 @@
 <template>
   <div class="ads">
-    <div v-if="!isLogin" class="login">
+    <div v-if="isLogin" class="login">
 
       <van-form @submit="onSubmit1">
         <van-image
@@ -69,7 +69,6 @@
               <template #value>
 
                 <van-button
-                    size="small"
                     @click="() => openDialog(index, item)"
                     type="primary"
                     :disabled="item.isFinish"

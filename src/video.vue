@@ -1,6 +1,6 @@
 <template>
   <div>
-    <video id="dialog-video" width="100%" autoplay v-if="url" playsinline="true" webkit-playsinline="true" style='height:400px'>
+    <video id="dialog-video" width="100%" autoplay v-if="url" playsinline="true" webkit-playsinline="true" style='width:200px;'>
       <source :src="url" type="video/mp4" />
       您的浏览器不支持视频标签。
     </video>
