@@ -98,14 +98,14 @@ export default {
     const isLogin = ref(false)
     const onSubmit1 = (values) => {
       console.log('submit', values);
-      if(values.name === 'admin' && values.pwd === 'admin'){
+      if (values.name === 'admin' && values.pwd === 'admin') {
         showNotify({
           type: "success",
           message: "登录成功！",
           duration: 1000,
         });
         isLogin.value = true
-      }else{
+      } else {
         showNotify({
           type: "danger",
           message: "账号密码错误！",
@@ -278,52 +278,52 @@ export default {
 </script>
 
 <style lang="less">
-.login{
+.login {
   height: 100vh;
+  padding-top: 40px;
   display: flex;
-  align-items: center;
   justify-content: center;
 }
-.ad {
 
+.ad {
   .van-cell {
     align-items: center;
   }
+}
 
-  .van-cell__title,
-  .van-cell__value {
-    flex: auto;
+.van-cell__title,
+.van-cell__value {
+  flex: auto;
+}
+
+.van-cell__title {
+  p > span {
+    color: red;
+  }
+}
+
+.van-cell__value {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.video_dl {
+  padding: 0;
+  background: none;
+
+  .van-dialog__footer {
+    width: 50%;
+    margin: auto;
   }
 
-  .van-cell__title {
-    p > span {
-      color: red;
-    }
+  .van-dialog__header {
+    display: none;
   }
 
-  .van-cell__value {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-
-  .video_dl {
+  .van-dialog__message {
     padding: 0;
-    background: none;
-
-    .van-dialog__footer {
-      width: 50%;
-      margin: auto;
-    }
-
-    .van-dialog__header {
-      display: none;
-    }
-
-    .van-dialog__message {
-      padding: 0;
-      overflow-y: hidden;
-    }
+    overflow-y: hidden;
   }
 }
 
