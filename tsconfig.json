@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "jsx": "preserve",  // 保留 JSX 语法以便 Vite 处理
+      "jsxFactory": "h",  // 使用 h 函数创建 JSX 元素
+      "jsxFragmentFactory": "Fragment",  // 使用 Fragment 来支持无根节点的组件
+      "types": ["vite/client"]
+    }
+  }
